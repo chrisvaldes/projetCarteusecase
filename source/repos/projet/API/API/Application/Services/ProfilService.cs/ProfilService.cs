@@ -11,32 +11,33 @@ namespace API.Application.Service.ProfilService
     public class ProfilService : IProfilService
     {
         private readonly IProfilRepository _profilRepository;
-        public ProfilService(IProfilRepository profilRepository)
+        private readonly ILogger<ProfilService> _logger;
+        public ProfilService(IProfilRepository profilRepository, ILogger<ProfilService> logger)
         {
             _profilRepository = profilRepository;
+            _logger = logger;
         }
-        public async Task<ApiResponse<ProfilDto>> CreateProfilAsync(ProfilDto profilDto)
+        public async Task< Profil> CreateProfilAsync(Profil profil)
         {
             try
             {
-                var profil = new Profil
-                {
-                    Id = Guid.NewGuid(),
-                    UserName = profilDto.UserName,
-                    Userag = profilDto.Userag,
-                    Email = profilDto.Email,
-                    TypeProfile = profilDto.TypeProfile,
-                    Status = EnumStatut.ACTIF.ToString(),
-                    IsDeleted = false
-                };
-                await _profilRepository.CreateProfilAsync(profil);
-                return ApiResponse<ProfilDto>.SuccessResponse(profilDto, "Profil created successfully.");
+                var profilResult = await _profilRepository.GetByUseragAsync(profil.Userag!); 
+
+                if (profilResult != null) {
+                    _logger.LogWarning("Profil already exists.");
+                    return null;
+                }
+
+                _logger.LogInformation($"Creating new profile for userag: {profil?.Userag}");
+                var created = await _profilRepository.CreateProfilAsync(profil);
+
+                return created;
             }
             catch (Exception ex)
             {
-                return ApiResponse<ProfilDto>.Fail("An error occurred while creating the profile.", new List<string> { ex.Message });
+                throw new Exception("Une erreur c'est produite lors de la sauvegarde." + ex.Message );
             }
         }
-        // Additional methods for updating, deleting, and retrieving profiles can be added here.
+ 
     }
 }

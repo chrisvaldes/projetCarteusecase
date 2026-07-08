@@ -1,13 +1,14 @@
 
 
 using API.Application.DTO;
+using API.Domain.Entities;
 
 namespace API.Application.Services.IServices
 {
 
     public interface IProfilService
     {
-        Task<ApiResponse<ProfilDto>> CreateProfilAsync(ProfilDto profil);
+        Task<Profil> CreateProfilAsync(Profil profil);
         //Task<ServiceResult<ProfilDto>> UpdateAsync(ProfilDto profilDto);
         //Task<bool> DeleteAsync(Guid id);
         //Task<ServiceResult<Profil>> GetByIdAsync(Guid id);

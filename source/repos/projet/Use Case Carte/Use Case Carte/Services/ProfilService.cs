@@ -2,84 +2,56 @@
 using System.Net.Http.Json;
 using Use_Case_Carte.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Use_Case_Carte.Components.Layout;
 
 namespace Use_Case_Carte.Services
 {
     public class ProfilService : BaseApiService
     {
-        public ProfilService(HttpClient http, ILocalStorageService storage) : base(http, storage)
+        private readonly IJSRuntime _js;
+
+        private SafeJs _safeJs;
+
+        public ProfilService(HttpClient http, ILocalStorageService storage, IJSRuntime js, SafeJs safeJs) : base(http, storage)
         {
+            _js = js;
+            _safeJs = safeJs;
         }
 
         // Retour standardisé : ApiResponse<ProfilModel>
-        public async Task<ApiResponse<ProfilModel>> Save(ProfilModel request)
-        {
-            await AddAuthHeader();
+        public async Task<ApiResponse<ProfilModel>> Save(ProfilModel request){
+            try {
+                await _safeJs.SafeJsUtilities("toggleOnLoaderAndToast");
 
-            Console.WriteLine($"===========>>   Profil: {request }");
-            Console.WriteLine($"===========>> Save Profil: {request.UserName}, {request.Email}");
-            Console.WriteLine($"===========>> base address : {_http.BaseAddress}");
+                await AddAuthHeader();
 
-            var response = await _http.PostAsJsonAsync("api/profil/save", request);
-            var content = await response.Content.ReadAsStringAsync();
+                var response = await _http.PostAsJsonAsync("api/profil/save", request);
 
-            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<ProfilModel>>();
 
-            // Si succès, tenter de désérialiser en ApiResponse<ProfilModel> ou ProfilModel
-            if (response.IsSuccessStatusCode)
-            {
-                try
+                if (result == null)
+                    throw new Exception("Réponse invalide du serveur.");
+
+                if (result.Success)
                 {
-                    var apiResp = JsonSerializer.Deserialize<ApiResponse<ProfilModel>>(content, jsonOptions);
-                    if (apiResp != null) return apiResp;
+                    await _safeJs.SafeJsUtilities("hideCreateProfileModal");
+                    await _safeJs.SafeJsUtilities("showToast", result.Message, "success");
                 }
-                catch
+                else
                 {
-                    // ignore parsing error, on essaiera l'autre format
+                    await _safeJs.SafeJsUtilities("showToast", result.Message, "danger");
                 }
 
-                try
-                {
-                    var model = JsonSerializer.Deserialize<ProfilModel>(content, jsonOptions);
-                    return new ApiResponse<ProfilModel>
-                    {
-                        Success = true,
-                        Message = "Profil créé avec succès",
-                        Data = model
-                    };
-                }
-                catch
-                {
-                    return new ApiResponse<ProfilModel>
-                    {
-                        Success = true,
-                        Message = "Profil créé avec succès",
-                        Data = null
-                    };
-                }
+                return result;
             }
-
-            // En cas d'erreur, tenter d'extraire un ApiResponse provenant de l'API
-            try
+            finally
             {
-                var errorResp = JsonSerializer.Deserialize<ApiResponse<ProfilModel>>(content, jsonOptions);
-                if (errorResp != null) return errorResp;
+                await _safeJs.SafeJsUtilities("toggleOffLoaderAndToast");
             }
-            catch
-            {
-                // ignore
-            }
-
-            // Fallback : retourner un ApiResponse avec le contenu brut comme message
-            return new ApiResponse<ProfilModel>
-            {
-                Success = false,
-                Message = string.IsNullOrWhiteSpace(content) ? "Erreur inconnue" : content,
-                Data = null
-            };
-        }
+        }        
 
         public async Task Logout()
         {

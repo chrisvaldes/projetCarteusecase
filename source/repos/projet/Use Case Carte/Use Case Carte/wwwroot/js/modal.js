@@ -136,48 +136,7 @@ function hideModal(el) {
     }
 }
 
-/* Fonctions AJAX / handlers existants (inchangés) */
-function LoginAsync(event) {
-    event.preventDefault();
-    toggleOnLoaderAndToast();
-
-    let formData = new FormData(event.target);
-    let data = Object.fromEntries(formData.entries());
-
-    fetch("/Auth/LoginAsync", {
-        method: "POST",
-        credentials: 'same-origin',
-        headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (!response.ok) {
-                toggleOffLoaderAndToast();
-                throw new Error("Erreur de traitement traitement.");
-            }
-            return response.json();
-        })
-        .then(result => {
-            if (result.success) {
-                toggleOffLoaderAndToast();
-                showToast(result.message, "success");
-                setTimeout(() => {
-                    window.location.href = result.redirectUrl;
-                }, 1500);
-            } else {
-                toggleOffLoaderAndToast();
-                showToast(result.message, "danger");
-            }
-        })
-        .catch(error => {
-            toggleOffLoaderAndToast();
-            showToast("Erreur : " + error.message, "danger");
-        });
-}
-
+ 
 async function DownloadBkmvti(event) {
     try {
         event.preventDefault();

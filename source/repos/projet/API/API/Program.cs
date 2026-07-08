@@ -85,9 +85,27 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "tonIssuer",
-        ValidAudience = "tonAudience",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("taCleSecrete"))
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = ctx =>
+        {
+            Console.WriteLine($"Jwt OnAuthenticationFailed: {ctx.Exception?.Message}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = ctx =>
+        {
+            Console.WriteLine("Jwt OnTokenValidated: token valid");
+            return Task.CompletedTask;
+        },
+        OnChallenge = ctx =>
+        {
+            Console.WriteLine($"Jwt OnChallenge: Error={ctx.Error} Description={ctx.ErrorDescription}");
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -127,8 +145,19 @@ app.UseCors("AllowUse_Case_Carte");
 
 app.UseHttpsRedirection();
         
-app.UseAuthorization();
 app.UseAuthentication(); 
+
+// Debugging: log raw Authorization header and authentication result
+app.Use(async (context, next) =>
+{
+    var authHeader = context.Request.Headers["Authorization"].ToString();
+    var isAuth = context.User?.Identity?.IsAuthenticated ?? false;
+    Console.WriteLine($"Incoming Authorization: {authHeader}");
+    Console.WriteLine($"HttpContext.User.Identity.IsAuthenticated: {isAuth}");
+    await next();
+});
+
+app.UseAuthorization();
 
 app.MapControllers();
 

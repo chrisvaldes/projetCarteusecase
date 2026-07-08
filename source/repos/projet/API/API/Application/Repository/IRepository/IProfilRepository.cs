@@ -5,11 +5,13 @@ namespace API.Application.Repository.IRepository
     using API.Domain.Entities.Enum;
     public interface IProfilRepository
     {
-        Task<ApiResponse<Profil>> CreateProfilAsync(Profil profilDto);
-        Task<ApiResponse<Profil>> UpdateProfilAsync(Guid id, Profil profilDto);
-        Task<ApiResponse<Profil>> GetProfilByIdAsync(Guid id);
-        Task<ApiResponse<IEnumerable<Profil>>> GetAllProfilsAsync();
-        Task<ApiResponse<Profil>> DeleteProfilAsync(Guid id);
-        Task<ApiResponse<List<Profil>>> GetProfilsByStatusAsync(EnumStatut status);
+        Task<Profil> CreateProfilAsync(Profil profilDto);
+        Task< Profil> UpdateProfilAsync(Guid id, Profil profilDto);
+        Task<Profil> GetProfilByIdAsync(Guid id);
+        Task<IEnumerable<Profil>> GetAllProfilsAsync();
+        Task<Profil> DeleteProfilAsync(Guid id);
+        Task<List<Profil>> GetProfilsByStatusAsync(EnumStatut status);
+
+        Task<Profil> GetByUseragAsync(string userAg);
     }
 }

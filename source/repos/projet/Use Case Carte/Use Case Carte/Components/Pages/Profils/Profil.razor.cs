@@ -33,14 +33,14 @@ public partial class Profil : ComponentBase
     }
 
     // Handler conseillé : reçoit EditContext, retourne Task
-    private async Task saveProfil( )
+    private async Task saveProfil()
     {
-        // Sérialiser le modèle pour voir toutes les propriétés dans les logs
-        var json = JsonSerializer.Serialize(profilModel);
-        Console.WriteLine($"===========>> Profil serialized: {json}");
-        Console.WriteLine($"===========>> UserName='{profilModel.UserName}' Email='{profilModel.Email}'");
-
         var resp = await ProfilService.Save(profilModel);
-        Console.WriteLine($"===========>> Save response: Success={resp?.Success} Message={resp?.Message}");
+
+        if (resp?.Success == true)
+        { 
+            profilModel = new ();
+            StateHasChanged();  
+        }
     }
 }

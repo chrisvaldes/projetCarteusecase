@@ -19,37 +19,53 @@ namespace API.Application.Repository{
 			_logger = logger;
 		}
 
-        public async Task<ApiResponse<Profil>> CreateProfilAsync(Profil profil)
+        public async Task<Profil> CreateProfilAsync(Profil profil)
         {
 			await _dbContext.AddAsync(profil);
-			await _dbContext.SaveChangesAsync();
-            return  ApiResponse<Profil>.SuccessResponse( profil, "Profil enregistré");
+			await _dbContext.SaveChangesAsync(); 
+
+            return profil;
         }
 
-        public async Task<ApiResponse<Profil>> DeleteProfilAsync(Guid id)
+        public async Task<Profil> DeleteProfilAsync(Guid id)
         {
             // Récupérer l'entité
 			var profil = await _dbContext.Profils.FindAsync(id);
 
 			if (profil == null)
 			{
-				return  ApiResponse<Profil>.Fail("Le profil n'existe pas."); // Rien à supprimer
+				return null; // Rien à supprimer
 			}
 
 			 profil.IsDeleted = true;
 
 			_dbContext.Profils.Update(profil);
 			await _dbContext.SaveChangesAsync();
-			return ApiResponse<Profil>.SuccessResponse(profil, "Profil supprimer.");;
+
+			return profil;
         }
 
-        public async Task<ApiResponse<IEnumerable<Profil>>> GetAllProfilsAsync()
+        public async Task<IEnumerable<Profil>> GetAllProfilsAsync()
         {
 			IEnumerable<Profil> profils = await _dbContext.Profils.Where(profil => profil.IsDeleted != true).AsNoTracking().ToListAsync();
-			return   ApiResponse<IEnumerable<Profil>>.SuccessResponse(profils);
+			return  profils;
         }
 
-        public async Task<ApiResponse<Profil>> GetProfilByIdAsync(Guid id)
+        public async Task<Profil> GetByUseragAsync(string userAg)
+        {
+            Profil? profil = await _dbContext.Profils 
+                .FirstOrDefaultAsync(x => x.Userag == userAg);
+
+			// Return the found profile or null when not present
+			if (profil == null)
+			{
+				return null;
+			}
+
+			return profil;
+        }
+
+        public async Task<Profil> GetProfilByIdAsync(Guid id)
         {
             Profil? profil = await _dbContext.Profils.FindAsync(id);
 
@@ -57,23 +73,23 @@ namespace API.Application.Repository{
 
 			if (profil == null)
 			{
-				return ApiResponse<Profil>.Fail("Aucun profil trouvé."); // Retourne null si non trouvé
+				return null; // Retourne null si non trouvé
 			}
 
 
-			return ApiResponse<Profil>.SuccessResponse(profil); // Retourne l'objet Profil trouvé
+			return profil; // Retourne l'objet Profil trouvé
         }
 
-        public Task<ApiResponse<List<Profil>>> GetProfilsByStatusAsync(EnumStatut status)
+        public Task<List<Profil>> GetProfilsByStatusAsync(EnumStatut status)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<Profil>> UpdateProfilAsync(Guid id, Profil profil)
+        public async Task<Profil> UpdateProfilAsync(Guid id, Profil profil)
         {
             if (id != profil.Id)
 			{
-				return ApiResponse<Profil>.Fail("Le profil n'existe pas");
+				return null;
 			}
 
 			// Marque l'entité comme modifiée
@@ -82,11 +98,11 @@ namespace API.Application.Repository{
 			try
 			{
 				await _dbContext.SaveChangesAsync();
-				return ApiResponse<Profil>.SuccessResponse(profil, "Profil mis-à-jour");
+				return  profil;
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				return ApiResponse<Profil>.Fail("Erreur de mise-à-jour du profil");
+				throw new Exception("Erreur de mise-à-jour du profil");
 			}
         }
     }

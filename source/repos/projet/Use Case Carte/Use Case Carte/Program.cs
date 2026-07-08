@@ -2,6 +2,7 @@ using Use_Case_Carte.Components;
 using Use_Case_Carte.Services;
 using Blazored.LocalStorage;
 using Use_Case_Carte.Components.Route;
+using Use_Case_Carte.Components.Layout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<NavigationService>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ProfilService>();
+builder.Services.AddScoped<SafeJs>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5229/") });
 
 var app = builder.Build();
