@@ -1,0 +1,263 @@
+@* @model IEnumerable<SYSGES_MAGs.Models.TypeMag>
+
+@{
+    var index = 1;
+} *@
+
+@page "/gestion-mag"
+ 
+<div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
+    <div>
+        <nav>
+            <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item fw-bold"> <a href=" "> Gestion des MAGs </a> </li> 
+            </ol>
+        </nav> 
+    </div>
+     
+    <button class="btn btn-primary open-modal-btn" id="openMagModalBtn">
+        <i class="fa-solid fa-plus me-1 fw-medium align-middle"></i>Nouveau MAG
+    </button>
+</div>
+<div class="row d-flex align-items-center justify-content-center">
+    <div class="col-xxl-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title"> Liste des types de MAG </div>
+
+                <div class="d-block">
+                    <div class="position-relative">
+
+                        <input type="text"
+                               id="searchInput"
+                               class="form-control pe-5"
+                               placeholder="Rechercher un utilisateur...">
+
+                        <!-- Bouton clear -->
+                        <span id="clearSearch"
+                              class="position-absolute top-50 end-0 translate-middle-y me-3"
+                              style="cursor:pointer; display:none;">
+
+                            <i class="fa-solid fa-xmark text-muted"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div class="d-flex align-items-end justify-content-end  mt-1">
+                        <small id="resultCount" class="text-muted mt-1"></small>
+                    </div>
+                </div>
+            </div>
+             
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="usersTable" class="table table-hover text-nowrap table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" scope="col">P.No</th>
+                                <th class="text-center" scope="col">Description MAG</th>
+                                <th class="text-center" scope="col">AG utilisateur</th>
+                                <th class="text-center" scope="col"  >Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            @* @if (!Model.Any())
+                            { *@
+                                <tr class="text-center text-danger">
+                                    <td colspan="4">Aucune donnée disponible pour les types de Manque à Gagner !</td>
+                                </tr>
+                            @* }
+                            else
+                            {
+                                @foreach (var typeMag in Model) *@
+                                @* { *@
+                                    <tr>
+                                        <td class="text-center">index</td>
+                                        <td class="text-center">typeMag.Description</td>
+                                        <td class="text-center">typeMag.Email</td>
+                                        <td class="text-center">
+                                            <div class="btn-list d-flex align-items-center justify-content-center">
+
+                                                <a href=" "
+                                                   class="btn btn-info ">
+                                                    Synthèse
+                                                </a>
+
+                                                 
+                                                    <form onsubmit="DownloadBkmvti(event)">
+                                                        <input type="hidden" id="typeMag" name="typeMag" value="typeMag.Id" />
+                                                        <input type="hidden" id="carteAReguler" name="carteAReguler" value="typeMag.Id" />
+                                                    
+                                                        <button type="submit"
+                                                            class="btn ">
+                                                              "Télécharger"
+                                                        </button> 
+                                                        <button type="button"
+                                                                onclick="DownloadCarteARegulerExcel(event)"
+                                                                class="btn btn-secondary"> 
+                                                            Carte à réguler
+                                                        </button>
+                                                    </form> 
+                                                
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                            @*         index++;
+                                }
+                            } *@
+                        </tbody>
+                    </table>
+                    <div class="card-footer">
+
+                        <div class="d-flex align-items-center">
+
+                            <div>
+                                <small id="resultCount" class="text-muted"></small>
+                            </div>
+
+                            <div class="ms-auto">
+
+                                <nav aria-label="Page navigation"
+                                     class="pagination-style-4">
+
+                                    <ul class="pagination mb-0" id="paginationContainer">
+
+                                        <!-- PREV -->
+                                        <li class="page-item" id="prevPageItem">
+
+                                            <a class="page-link"
+                                               href="javascript:void(0);"
+                                               id="prevPage">
+
+                                                Prec
+
+                                            </a>
+
+                                        </li>
+
+                                        <!-- NUMEROS -->
+                                        <span id="pageNumbers"
+                                              class="d-flex  gap-1 mx-1"></span>
+
+                                        <!-- NEXT -->
+                                        <li class="page-item" id="nextPageItem">
+
+                                            <a class="page-link text-primary"
+                                               href="javascript:void(0);"
+                                               id="nextPage">
+
+                                                Suiv
+
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+
+                                </nav>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+             
+        </div>
+    </div>
+
+
+    
+
+</div>
+
+@* Modal de creation de mag  onsubmit="event.preventDefault(); saveMag(event)" *@
+
+<form>
+    @* @Html.AntiForgeryToken() *@
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">Nouveau MAG</h6> <button type="button" class="btn-close cancelBtn"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row gy-3">
+                    <div class="col-xl-12">
+                        <label for="typeMag" class="form-label">Type de MAG <span class="text-danger">*</span></label>
+                        <select name="typeMag" class="form-select">
+                            <option selected="" disabled>Selectionnez un type de MAG</option>
+                            <option value="CL_AV_PACK">Client avec plus d'une carte</option>
+                            @* <option value="CL_SA_PACK">Client sans package</option>
+                            <option value="CL_SA_PACK">Client avec plus d'une carte gratuite</option>
+                            <option value="CL_SA_PACK">Client avec carte business gratuite</option>
+                            <option value="CL_SA_PACK">Client avec motié tarif carte sans dérogation existante</option>
+                            <option value="CL_CTX">Client avec carte sur compte d'épargne gratuite</option>
+                            <option value="CL_CTX">Client avec carte non aligné à la gamme de package </option> *@
+                        </select>
+                    </div>
+                    <div class="col-xl-12 d-flex align-items-center justify-content-center">
+                        <div class="col-xl-6 me-2">
+                            <label for="startPeriod" class="form-label">Période début <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="startPeriod" name="startPeriod" placeholder="Période de début">
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="endPeriod" class="form-label">Période Fin <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="endPeriod" name="endPeriod" placeholder="Période de début">
+                        </div>
+                         
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="apprint" class="form-label">Fichier Apprint <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="apprint" name="apprint" placeholder="Fournir le fichier Apprint">
+                    </div>
+
+                    <div class="col-xl-12">
+                        <label for="openAccount" class="form-label">Fichier compte ouvert <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="openAccount" name="openAccount" placeholder="Fichier compte ouvert">
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="activeAccount" class="form-label">Fichier Compte actif <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="activeAccount" name="activeAccount" placeholder="Fichier compte actif">
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="activePackage" class="form-label">Package actif <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="activePackage" name="activePackage" placeholder="Fichier Package actif">
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="ctxAccount" class="form-label">Comptes en contentieux <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="ctxAccount" name="ctxAccount" placeholder="Fichier Comptes contentieux">
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="dateLastSouPackEchu" class="form-label">Fichier date dernière souscription package échu <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="dateLastSouPackEchu" name="dateLastSouPackEchu" placeholder="Fichier package echu">
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="accountHisDebiteByRedevCard" class="form-label">Fichier compte débité par redev carte <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="accountHisDebiteByRedevCard" name="accountHisDebiteByRedevCard" placeholder="Fichier compte débité par redev carte">
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light cancelBtn">
+                    Annuler
+                </button>
+                <button type="submit" class="btn btn-success">
+                    Lancer Traitement
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@* // @await Html.PartialAsync("~/Views/Shared/Components/_ModalSuppression.cshtml")
+
+ 
+// @await Html.PartialAsync("~/Views/Shared/Components/_Toast.cshtml") *@
+
+
