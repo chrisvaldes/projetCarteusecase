@@ -38,6 +38,21 @@ namespace API.Application.Service.ProfilService
                 throw new Exception("Une erreur c'est produite lors de la sauvegarde." + ex.Message );
             }
         }
- 
+
+        public Task<IEnumerable<Profil>> GetAll()
+        {
+            try{
+                var profils = _profilRepository.GetAllProfilsAsync();
+                if(profils == null){
+                    _logger.LogWarning("No profiles found.");
+                    return null;
+                }
+                return profils;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Une erreur c'est produite lors de la récupération des profils." + ex.Message );    
+            }
+        }
     }
 }

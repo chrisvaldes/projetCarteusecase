@@ -16,24 +16,24 @@ function initProfileModals() {
             }
         });
     }
+
+    
+     
 }
 window.initProfileModals = initProfileModals;
 
-function hideCreateProfileModal() {
-    const modal = document.getElementById("createProfileModal");
-    if (!modal) return;
-    try {
-        if (window.hideModal) {
-            hideModal(modal);
-            return;
+
+
+
+document.addEventListener("click", function(e) {
+    if (e.target.closest(".cancelBtn")) {
+        const modalElement = document.querySelector("#createProfileModal");
+
+        if (modalElement) {
+            bootstrap.Modal.getOrCreateInstance(modalElement).hide();
         }
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
-        // remove generated backdrop if any
-        document.querySelectorAll('div.modal-backdrop[data-generated="true"]').forEach(el => el.remove());
-    } catch (ex) {
-        console.warn('hideCreateProfileModal failed', ex);
     }
-}
-window.hideCreateProfileModal = hideCreateProfileModal;
+});
+
+
+ 

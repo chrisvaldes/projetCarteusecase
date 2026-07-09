@@ -1,0 +1,60 @@
+<EditForm Model="Profil" OnValidSubmit="SaveProfil">
+    <div
+        class="modal fade"
+        id="updateProfileModal"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier un profil</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Nom</label>
+                        <InputText class="form-control" @bind-Value="Profil.UserName" />
+                    </div>
+                    <div class="mb-3">
+                        <label>AG</label>
+                        <InputText class="form-control" @bind-Value="Profil.Userag" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <InputText class="form-control" @bind-Value="Profil.Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Type Profil</label>
+                        <InputSelect class="form-select" @bind-Value="Profil.TypeProfile">
+                            <option value="SUPER_ADMIN">Super Admin</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="MON_OFFICER">Officer</option>
+                            <option value="MON_MANAGER">Manager</option>
+                            <option value="COMPTABLE">Comptable</option>
+                        </InputSelect>
+                    </div>
+                    <div class="mb-3">
+                        <label>Status</label>
+                        <InputSelect class="form-select" @bind-Value="Profil.Status">
+                            <option value="Actif">Actif</option>
+                            <option value="Inactif">Inactif</option>
+                        </InputSelect>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button class="btn btn-success" type="submit">
+                        Modifier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>

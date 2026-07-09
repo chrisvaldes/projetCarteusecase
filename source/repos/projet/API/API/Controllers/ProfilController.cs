@@ -40,5 +40,17 @@ namespace API.Controllers
             }
             return Ok(ApiResponse<Profil>.Fail("Tout les champs du formulaire sont requis"));
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAllProfils()
+        {
+            var profils = await _profilService.GetAll();
+            if (profils != null)
+            {
+                return Ok(ApiResponse<IEnumerable<Profil>>.SuccessResponse(profils, "Profils récupérés avec succès."));
+            }
+            return Ok(ApiResponse<IEnumerable<Profil>>.Fail("Aucun profil trouvé."));
+        }
     }
 }

@@ -51,7 +51,24 @@ namespace Use_Case_Carte.Services
             {
                 await _safeJs.SafeJsUtilities("toggleOffLoaderAndToast");
             }
-        }        
+        }     
+
+        public async Task<IEnumerable<ProfilModel>> GetAllProfils()
+        {
+            await AddAuthHeader();
+
+            var response = await _http.GetAsync("api/profil");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<ApiResponse<IEnumerable<ProfilModel>>>();
+                return result?.Data ?? new List<ProfilModel>();
+            }
+            else
+            {
+                throw new Exception("Erreur lors de la récupération des profils.");
+            }
+        }   
 
         public async Task Logout()
         {

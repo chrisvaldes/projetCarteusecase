@@ -1,47 +1,43 @@
-﻿    @inherits LayoutComponentBase
-    @using Use_Case_Carte.Components.Skeletor
-
-    <div class="page">
-        <!-- app-header -->
-        <header class="app-header sticky sticky-pin" id="header">
-            <Header />
-        </header>
-        <!-- /app-header -->
-
-        <!-- Start::app-sidebar -->
-        <aside class="app-sidebar sticky sticky-pin" id="sidebar">
-            <Aside />
-        </aside>
-        <!-- End::app-sidebar -->
-
-        <!-- Start::app-content -->
-        <div class="main-content app-content">
-            <div class="container-fluid">
-                <!-- Loader local -->
-                <div id="contentLoader" class="loader-overlay content-loader" style="display:none;">
-                    <div class="loader-container">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-
-                <!-- Contenu -->
-                <div id="pageContent">
-                    <main role="main" class="pb-3">
-                        @Body
-                    </main>
+﻿@inherits LayoutComponentBase
+@using Use_Case_Carte.Components.Skeletor
+<div class="page">
+    <!-- app-header -->
+    <header class="app-header sticky sticky-pin" id="header">
+        <Header />
+    </header>
+    <!-- /app-header -->
+    <!-- Start::app-sidebar -->
+    <aside class="app-sidebar sticky sticky-pin" id="sidebar">
+        <Aside />
+    </aside>
+    <!-- End::app-sidebar -->
+    <!-- Start::app-content -->
+    <div class="main-content app-content">
+        <div class="container-fluid">
+            <!-- Loader local -->
+            <div
+                id="contentLoader"
+                class="loader-overlay content-loader"
+                style="display:none;">
+                <div class="loader-container">
+                    <div class="spinner"></div>
                 </div>
             </div>
+            <!-- Contenu -->
+            <div id="pageContent">
+                <main role="main" class="pb-3">
+                    @Body
+                </main>
+            </div>
         </div>
-        <!-- End::app-content -->
-
-        <!-- Footer -->
-        <footer class="app-footer">
-            <Footer />
-        </footer>
     </div>
-
-    <!-- Modal de suppression -->
-    <ModalSuppression />
-
-    <!-- Toast de notification -->
-    <Toast />
+    <!-- End::app-content -->
+    <!-- Footer -->
+    <footer class="app-footer">
+        <Footer />
+    </footer>
+</div>
+<!-- Modal de suppression -->
+<ModalSuppression />
+<!-- Toast de notification -->
+<Toast />

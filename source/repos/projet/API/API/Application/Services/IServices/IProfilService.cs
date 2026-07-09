@@ -12,7 +12,7 @@ namespace API.Application.Services.IServices
         //Task<ServiceResult<ProfilDto>> UpdateAsync(ProfilDto profilDto);
         //Task<bool> DeleteAsync(Guid id);
         //Task<ServiceResult<Profil>> GetByIdAsync(Guid id);
-        //Task<IEnumerable<ProfilDto>> GetAll();
+        Task<IEnumerable<Profil>> GetAll();
         //public Task<ServiceResult<Profil>> GetByUserag(string userag);
 
     }

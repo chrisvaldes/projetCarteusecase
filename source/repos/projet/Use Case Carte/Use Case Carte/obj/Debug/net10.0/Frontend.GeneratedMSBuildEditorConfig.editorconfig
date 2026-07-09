@@ -59,8 +59,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Pages/Profils/CreateProfil.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9maWxzXENyZWF0ZVByb2ZpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Pages/Profils/ListProfil.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9maWxzXExpc3RQcm9maWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Pages/Profils/Profil.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9maWxzXFByb2ZpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Pages/Profils/UpdateProfil.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9maWxzXFVwZGF0ZVByb2ZpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Pages/Toast/ToastNotification.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUb2FzdFxUb2FzdE5vdGlmaWNhdGlvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Routes.razor]
@@ -77,6 +93,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/Skeletor/Header.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTa2VsZXRvclxIZWFkZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/ToastComponent/Toast.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUb2FzdENvbXBvbmVudFxUb2FzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Admin_dev/source/repos/projet/Use Case Carte/Use Case Carte/Components/_Imports.razor]
